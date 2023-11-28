@@ -9,6 +9,12 @@ module.exports = function (io) {
             //유저정보 저장 (11.24)
             try {
                 const user = await userController.saveUser(userName, socket.id);
+                // 입장 시 시스템 메시지 (11.28)
+                const welcomeMessage = {
+                    chat: `${user.name} is joined to this room`,
+                    user: { id: null, name: "system" },
+                };
+                io.emit("message", welcomeMessage);
                 cb({ ok: true, data: user });
             }catch(error){
                 cb({ ok: false, error: error.message });
